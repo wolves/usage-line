@@ -53,3 +53,7 @@ Two renderer details to know about when changing the colors:
 
 - Use `ansi256(n)` (0–15 is the terminal's own palette), `#hex`, `rgb()` or a theme key. A bare name like `"yellow"` passes validation but is drawn uncolored.
 - `dimColor` draws the theme's grey and replaces any `color` set beside it. It is not ANSI dim.
+
+## License
+
+MIT
