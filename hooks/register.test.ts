@@ -100,6 +100,31 @@ test('effort comes from settings, else from the last request', async ($, on) => 
   expect(await band($)).toContain('| max |')
 })
 
+test('effort is colored by level', async ($, on) => {
+  mock.clock(on, { now: HOUR })
+  const settings: Record<string, unknown> = {}
+  engine(on, settings)
+  await $.session.measure(measure(10, 10, 10))
+
+  const colors: Record<string, unknown> = {}
+  for (const level of ['low', 'medium', 'high', 'xhigh', 'max']) {
+    settings.effortLevel = level
+    await submit($)
+    const ui = await $.ui.mount({ ...BAND, surface: 'terminal' })
+    const drawn = (await ui.findAll({ type: 'Text' })).find(t => t.text === level)
+    colors[level] = drawn?.props.dimColor ? 'grey' : drawn?.props.color
+    await ui.unmount()
+  }
+
+  expect(colors).toEqual({
+    low: 'grey',
+    medium: 'ansi256(7)',
+    high: 'ansi256(6)',
+    xhigh: 'ansi256(4)',
+    max: 'ansi256(5)',
+  })
+})
+
 test('toasts once per threshold and again after a reset', async ($, on) => {
   mock.clock(on, { now: 0 })
   const seen = engine(on)

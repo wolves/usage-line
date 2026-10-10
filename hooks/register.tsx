@@ -21,6 +21,16 @@ const YELLOW = 'ansi256(3)'
 const WHITE = 'ansi256(7)'
 const RED = 'ansi256(1)'
 
+// Effort warms as it rises; low is left in the theme's grey. A level not
+// listed here (a numeric budget) is drawn white.
+const EFFORT_COLORS: Readonly<Record<string, string | undefined>> = {
+  low: undefined,
+  medium: WHITE,
+  high: 'ansi256(6)',
+  xhigh: 'ansi256(4)',
+  max: 'ansi256(5)',
+}
+
 const toWindow = (limit: SessionRateLimit | undefined): Window | undefined =>
   limit && {
     percent: limit.percentUsed,
@@ -177,7 +187,10 @@ export const register: Register = (on, options) => {
 
     const effort = chosen.effort ?? last.effort
     if (last.model) parts.push({ key: 'model', text: prettyModel(last.model), color: YELLOW })
-    if (effort) parts.push({ key: 'effort', text: effort, color: WHITE })
+    if (effort) {
+      const color = effort in EFFORT_COLORS ? EFFORT_COLORS[effort] : WHITE
+      parts.push({ key: 'effort', text: effort, color })
+    }
     parts.push(
       chosen.advisor
         ? { key: 'advisor', text: `Advisor: ${prettyModel(chosen.advisor)}`, color: WHITE }

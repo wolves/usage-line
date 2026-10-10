@@ -9,7 +9,7 @@ A Claude Code mod that keeps your usage in view, right-aligned in the band above
 - **5h**: the five-hour rate-limit window, with the time until it resets
 - **wk**: the seven-day window
 - **ctx**: how full the context window is
-- the model, the effort level, and the advisor model (`off` when none is set)
+- the model, the effort level (colored by level: grey for low, then white, cyan, blue and magenta up to max), and the advisor model (`off` when none is set)
 
 A figure at or past the warning threshold turns bold red, and a toast fires once when a figure crosses each threshold. It fires again only after the figure drops back below that threshold, for example after a window resets or a compaction.
 
