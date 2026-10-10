@@ -1,0 +1,25 @@
+{
+  "name": "usage-line",
+  "version": "0.1.0",
+  "description": "Rate-limit, context, model, effort and advisor readout above the prompt, with toasts when a window runs high",
+  "author": {
+    "name": "Wolves",
+    "url": "https://github.com/wolves"
+  },
+  "repository": "https://github.com/wolves/usage-line",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "warnAt": {
+      "type": "number",
+      "title": "Warn at (%)",
+      "description": "Highlight a figure and toast once when a window or the context reaches this percent",
+      "default": 80
+    },
+    "criticalAt": {
+      "type": "number",
+      "title": "Critical at (%)",
+      "description": "Toast again when a window or the context reaches this percent",
+      "default": 95
+    }
+  }
+}

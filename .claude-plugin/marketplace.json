@@ -1,0 +1,14 @@
+{
+  "name": "usage-line",
+  "description": "Claude Code mod: a usage, model, effort and advisor readout above the prompt",
+  "owner": {
+    "name": "Wolves"
+  },
+  "plugins": [
+    {
+      "name": "usage-line",
+      "source": "./",
+      "description": "Rate-limit, context, model, effort and advisor readout above the prompt, with toasts when a window runs high"
+    }
+  ]
+}
