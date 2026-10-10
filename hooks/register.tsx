@@ -156,7 +156,8 @@ export const register: Register = (on, options) => {
       return next(e)
     }
 
-    const parts: { key: string; text: string; color?: string; bold?: boolean }[] = []
+    // `muted` follows `text` in the theme's grey: a value that is only a default.
+    const parts: { key: string; text: string; muted?: string; color?: string; bold?: boolean }[] = []
 
     for (const key of Object.keys(LABELS) as (keyof typeof LABELS)[]) {
       const value = figures ? percentOf(figures, key) : undefined
@@ -175,11 +176,13 @@ export const register: Register = (on, options) => {
     }
 
     const effort = chosen.effort ?? last.effort
-    const advisor = chosen.advisor ? prettyModel(chosen.advisor) : 'off'
-
     if (last.model) parts.push({ key: 'model', text: prettyModel(last.model), color: YELLOW })
     if (effort) parts.push({ key: 'effort', text: effort, color: WHITE })
-    parts.push({ key: 'advisor', text: `Advisor: ${advisor}`, color: WHITE })
+    parts.push(
+      chosen.advisor
+        ? { key: 'advisor', text: `Advisor: ${prettyModel(chosen.advisor)}`, color: WHITE }
+        : { key: 'advisor', text: 'Advisor: ', muted: 'off', color: WHITE },
+    )
 
     const { Box, Text } = $.ui.resolve(e)
 
@@ -191,6 +194,7 @@ export const register: Register = (on, options) => {
             <Text color={part.color} dimColor={part.color === undefined} bold={part.bold}>
               {part.text}
             </Text>
+            {part.muted ? <Text dimColor>{part.muted}</Text> : null}
           </Text>
         ))}
       </Box>

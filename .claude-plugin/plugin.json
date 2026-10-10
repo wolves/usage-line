@@ -1,6 +1,6 @@
 {
   "name": "usage-line",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Rate-limit, context, model, effort and advisor readout above the prompt, with toasts when a window runs high",
   "author": {
     "name": "Wolves",

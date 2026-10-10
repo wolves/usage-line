@@ -39,21 +39,23 @@ const step = async ($: Engine, effort?: 'low' | 'high') => {
   }
 }
 
+// The band above the prompt, as a surface would ask for it.
+const BAND = {
+  plugin: 'usage-line',
+  component: 'AbovePrompt',
+  props: {
+    hasSurvey: false,
+    isWorking: false,
+    maxRows: 10,
+    bodyColumns: 120,
+    scroll: { offset: 0, bodyRows: 9 },
+    view: {},
+  },
+} as const
+
 // The band's text as one surface draws it.
 const band = async ($: Engine, surface: RenderSurface = 'terminal') => {
-  const ui = await $.ui.mount({
-    plugin: 'usage-line',
-    surface,
-    component: 'AbovePrompt',
-    props: {
-      hasSurvey: false,
-      isWorking: false,
-      maxRows: 10,
-      bodyColumns: 120,
-      scroll: { offset: 0, bodyRows: 9 },
-      view: {},
-    },
-  })
+  const ui = await $.ui.mount({ ...BAND, surface })
   const text = (await ui.find({ key: 'usage-line' }))?.text ?? ''
   await ui.unmount()
   return text
@@ -87,6 +89,11 @@ test('effort comes from settings, else from the last request', async ($, on) => 
   await submit($)
   await step($, 'low')
   expect(await band($)).toContain('| low | Advisor: off')
+
+  const ui = await $.ui.mount({ ...BAND, surface: 'terminal' })
+  const off = (await ui.findAll({ type: 'Text' })).find(t => t.text === 'off')
+  expect(off?.props.dimColor).toBe(true)
+  await ui.unmount()
 
   settings.effortLevel = 'max'
   await submit($)
